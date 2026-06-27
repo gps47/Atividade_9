@@ -1,0 +1,756 @@
+/* =============================================================
+   DINO STRIKE — Folha de estilos principal
+   Paleta extraída do wallpaper: laranja-brasa, cinza-fumaça,
+   vermelho-sangue e âmbar — sem néon, visual cinematográfico
+   ============================================================= */
+
+:root {
+  /* Fundo e painéis — escuros como a noite do wallpaper */
+  --cor-fundo:        #0c0a08;
+  --cor-painel:       rgba(12, 8, 5, 0.82);
+  --cor-borda:        #2a1e10;
+  --cor-borda-brilho: #4a3018;
+
+  /* Cores principais tiradas da imagem */
+  --laranja-brasa:  #d4500a;   /* fogo dos helicópteros */
+  --ambar:          #c8860a;   /* céu iluminado */
+  --ambar-claro:    #e8a830;   /* destaque suave */
+  --vermelho-escuro:#8b1a08;   /* sombra do T-Rex */
+  --cinza-fumaca:   #6a7070;   /* fumaça de fundo */
+  --creme-osseo:    #c8b89a;   /* texto principal — cor de osso/areia */
+
+  /* Texto — aumentei o contraste para compensar o wallpaper */
+  --texto-principal:  #ede0c8;   /* mais claro que antes */
+  --texto-secundario: #9a8060;   /* antes era #6a5a40, visibilidade baixa */
+
+  /* Fontes */
+  --fonte-display: 'Orbitron', monospace;
+  --fonte-mono:    'Share Tech Mono', monospace;
+
+  --raio-borda: 4px;
+  --transicao:  0.15s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background-color: var(--cor-fundo);
+  color: var(--texto-principal);
+  font-family: var(--fonte-mono);
+  overflow-x: hidden;
+}
+
+/* =============================================================
+   WALLPAPER — cobre toda a tela com overlay escuro
+   O overlay gradient preserva legibilidade do conteúdo
+   ============================================================= */
+body::before{
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    /* Overlay mais escuro — antes estava em 0.65/0.50/0.80, subia pouco contraste */
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(10,6,3,.80),
+            rgba(10,6,3,.70),
+            rgba(10,6,3,.90)
+        ),
+        url("../images/fundo.jpg") center center / cover no-repeat;
+
+    z-index: 0;
+}
+body > *{
+    position: relative;
+    z-index: 1;
+}
+
+/* Scanlines sutis — mantém o clima de terminal sem pesar */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.10) 3px,
+    rgba(0, 0, 0, 0.10) 4px
+  );
+}
+
+/* =============================================================
+   SISTEMA DE TELAS
+   ============================================================= */
+.tela { display: none; min-height: 100vh; }
+.tela.ativa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =============================================================
+   TELA INICIAL
+   ============================================================= */
+.intro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 36px 24px;
+  max-width: 620px;
+  width: 100%;
+}
+
+/* Painel semitransparente atrás do conteúdo — mais opaco para legibilidade */
+.intro-container > * {
+  backdrop-filter: blur(4px);
+}
+
+.logo-area {
+  text-align: center;
+  border-bottom: 1px solid var(--cor-borda-brilho);
+  padding-bottom: 18px;
+  width: 100%;
+}
+
+.subtitulo-logo {
+  font-size: 0.68rem;
+  letter-spacing: 0.4em;
+  color: var(--texto-secundario);
+  margin-bottom: 6px;
+}
+
+.titulo-logo {
+  font-family: var(--fonte-display);
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #f0e8d8;  /* branco-creme bem visível sobre qualquer fundo */
+  line-height: 1;
+  text-shadow: 0 2px 24px rgba(0,0,0,1), 0 0 40px rgba(0,0,0,0.9);
+}
+
+/* Destaque em laranja-brasa em vez de néon */
+.titulo-logo .destaque {
+  color: var(--laranja-brasa);
+  text-shadow: 0 0 24px rgba(212, 80, 10, 0.5), 0 2px 20px rgba(0,0,0,0.8);
+}
+
+.versao-logo {
+  font-size: 0.62rem;
+  color: var(--texto-secundario);
+  margin-top: 6px;
+  letter-spacing: 0.2em;
+}
+
+/* Aviso */
+.aviso-intro {
+  background: rgba(139, 26, 8, 0.15);
+  border: 1px solid rgba(139, 26, 8, 0.4);
+  border-left: 3px solid var(--laranja-brasa);
+  padding: 14px 18px;
+  border-radius: var(--raio-borda);
+  width: 100%;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.aviso-intro p:first-child {
+  color: var(--laranja-brasa);
+  font-family: var(--fonte-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 6px;
+}
+
+.texto-intro { color: var(--creme-osseo); }  /* subiu de --texto-secundario para creme */
+
+/* Campo nome */
+.campo-nome { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+
+.label-nome {
+  font-family: var(--fonte-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  color: var(--texto-secundario);
+}
+
+.input-nome {
+  width: 100%;
+  background: rgba(12, 8, 5, 0.75);
+  border: 1px solid var(--cor-borda-brilho);
+  border-radius: var(--raio-borda);
+  color: var(--ambar-claro);
+  font-family: var(--fonte-display);
+  font-size: 1rem;
+  padding: 12px 16px;
+  letter-spacing: 0.1em;
+  outline: none;
+  transition: border-color var(--transicao), box-shadow var(--transicao);
+  backdrop-filter: blur(4px);
+}
+
+.input-nome::placeholder { color: var(--cor-borda-brilho); font-family: var(--fonte-mono); font-size: 0.8rem; }
+
+.input-nome:focus {
+  border-color: var(--ambar);
+  box-shadow: 0 0 12px rgba(200, 134, 10, 0.25);
+}
+
+/* Legenda dinos */
+.legenda-dinos {
+  width: 100%;
+  background: rgba(12, 8, 5, 0.6);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  padding: 14px 16px;
+  backdrop-filter: blur(4px);
+}
+
+.legenda-titulo {
+  font-family: var(--fonte-display);
+  font-size: 0.60rem;
+  letter-spacing: 0.25em;
+  color: var(--texto-secundario);
+  margin-bottom: 12px;
+}
+
+.legenda-grid { display: flex; flex-direction: column; gap: 10px; }
+
+.legenda-item { display: flex; align-items: center; gap: 14px; }
+.legenda-emoji { font-size: 1.8rem; line-height: 1; width: 40px; text-align: center; }
+.legenda-nome { font-family: var(--fonte-display); font-size: 0.66rem; letter-spacing: 0.15em; color: var(--creme-osseo); }
+.legenda-desc { font-size: 0.70rem; color: var(--creme-osseo); margin-top: 2px; opacity: 0.75; }
+
+/* =============================================================
+   BOTÕES
+   ============================================================= */
+.btn-primario {
+  width: 100%;
+  padding: 15px;
+  background: rgba(212, 80, 10, 0.12);
+  border: 1px solid var(--laranja-brasa);
+  border-radius: var(--raio-borda);
+  color: var(--ambar-claro);
+  font-family: var(--fonte-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: background var(--transicao), box-shadow var(--transicao), transform var(--transicao);
+  text-shadow: 0 0 10px rgba(200, 134, 10, 0.4);
+  box-shadow: 0 0 18px rgba(212, 80, 10, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.btn-primario:hover {
+  background: rgba(212, 80, 10, 0.22);
+  box-shadow: 0 0 28px rgba(212, 80, 10, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primario:active { transform: translateY(0); }
+
+.btn-secundario {
+  flex: 1;
+  padding: 13px;
+  background: rgba(12, 8, 5, 0.5);
+  border: 1px solid var(--cor-borda-brilho);
+  border-radius: var(--raio-borda);
+  color: var(--texto-secundario);
+  font-family: var(--fonte-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: border-color var(--transicao), color var(--transicao);
+  backdrop-filter: blur(4px);
+}
+
+.btn-secundario:hover { border-color: var(--creme-osseo); color: var(--creme-osseo); }
+
+/* =============================================================
+   RANKING
+   ============================================================= */
+.ranking-container {
+  width: 100%;
+  background: rgba(12, 8, 5, 0.6);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  padding: 14px 16px;
+  backdrop-filter: blur(4px);
+}
+
+.ranking-titulo {
+  font-family: var(--fonte-display);
+  font-size: 0.60rem;
+  letter-spacing: 0.25em;
+  color: var(--ambar);
+  margin-bottom: 10px;
+}
+
+.lista-ranking { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+.lista-ranking li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--texto-secundario);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.lista-ranking li:last-child { border-bottom: none; }
+.ranking-pos { font-family: var(--fonte-display); font-size: 0.62rem; color: var(--ambar); min-width: 24px; }
+.ranking-nome { flex: 1; padding: 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ranking-pts { font-family: var(--fonte-display); color: var(--laranja-brasa); font-size: 0.8rem; }
+.ranking-vazio { font-size: 0.75rem; color: var(--cor-borda-brilho); text-align: center; padding: 8px 0; }
+
+/* =============================================================
+   TELA DE CONTAGEM REGRESSIVA
+   ============================================================= */
+#tela-contagem {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+}
+
+#tela-contagem.ativa { display: flex; }
+
+.contagem-aviso {
+  font-family: var(--fonte-mono);
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  color: var(--texto-secundario);
+  letter-spacing: 0.15em;
+  max-width: 480px;
+  line-height: 1.7;
+  animation: fadeIn 0.5s ease;
+}
+
+.contagem-aviso span {
+  color: var(--laranja-brasa);
+  font-family: var(--fonte-display);
+}
+
+.contagem-numero {
+  font-family: var(--fonte-display);
+  font-size: clamp(5rem, 18vw, 9rem);
+  font-weight: 900;
+  color: var(--laranja-brasa);
+  text-shadow: 0 0 40px rgba(212, 80, 10, 0.6), 0 4px 30px rgba(0,0,0,0.9);
+  line-height: 1;
+  animation: pulso-numero 1s ease-out;
+}
+
+.contagem-go {
+  font-family: var(--fonte-display);
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 900;
+  color: var(--ambar-claro);
+  text-shadow: 0 0 30px rgba(232, 168, 48, 0.5);
+  letter-spacing: 0.2em;
+  animation: pulso-numero 0.5s ease-out;
+}
+
+/* =============================================================
+   TELA DE JOGO
+   ============================================================= */
+#tela-jogo { display: none; flex-direction: column; justify-content: flex-start; align-items: center; min-height: 100vh; padding: 0; }
+#tela-jogo.ativa { display: flex; }
+
+/* HUD */
+.hud {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(10, 6, 3, 0.88);
+  border-bottom: 1px solid var(--cor-borda-brilho);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+}
+
+.hud-bloco { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 60px; }
+.hud-centro { align-items: center; text-align: center; }
+
+.hud-label {
+  font-family: var(--fonte-display);
+  font-size: 0.48rem;
+  letter-spacing: 0.2em;
+  color: var(--texto-secundario);
+}
+
+.hud-valor {
+  font-family: var(--fonte-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--creme-osseo);
+  letter-spacing: 0.05em;
+}
+
+.hud-pontos { color: var(--ambar-claro); }
+.hud-combo  { color: var(--ambar); }
+.hud-tempo  { color: var(--creme-osseo); }
+.hud-fase   { font-size: 0.7rem; letter-spacing: 0.1em; }
+
+.hud-fase.controlado { color: var(--ambar-claro); }
+.hud-fase.alerta     { color: var(--laranja-brasa); }
+.hud-fase.critico    { color: #ff4422; animation: piscar 0.6s infinite; }
+
+/* Botão cancelar no HUD */
+.btn-cancelar {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--cor-borda-brilho);
+  border-radius: var(--raio-borda);
+  color: var(--texto-secundario);
+  font-family: var(--fonte-display);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: border-color var(--transicao), color var(--transicao);
+  align-self: center;
+}
+
+.btn-cancelar:hover { border-color: var(--laranja-brasa); color: var(--laranja-brasa); }
+
+/* Vidas */
+.hud-vidas { align-items: flex-end; }
+.icones-vida { display: flex; gap: 5px; }
+.icone-vida { font-size: 1rem; transition: opacity 0.3s, filter 0.3s; }
+.icone-vida.perdida { opacity: 0.18; filter: grayscale(1); }
+
+/* Grid */
+.grid-cercados {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 18px;
+  width: 100%;
+  max-width: 600px;
+  flex: 1;
+  align-content: center;
+}
+
+/* Cercados com fundo semi-opaco para o wallpaper aparecer */
+.cercado {
+  aspect-ratio: 1;
+  background: rgba(12, 8, 5, 0.65);
+  border: 1px solid var(--cor-borda);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.1s, box-shadow 0.1s, background 0.1s;
+  user-select: none;
+  backdrop-filter: blur(3px);
+}
+
+/* Imagem do dino dentro do cercado — uso img criada pelo JS */
+.cercado .dino-img {
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  pointer-events: none;
+  animation: dino-entrar 0.15s ease-out;
+}
+
+@keyframes dino-entrar {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.cercado.ativo { cursor: crosshair; }
+
+.cercado.tipo-raptor.ativo {
+  border-color: var(--ambar);
+  box-shadow: inset 0 0 16px rgba(200, 134, 10, 0.15);
+  animation: pulso-ambar 1s ease-in-out infinite;
+}
+
+.cercado.tipo-braquio.ativo {
+  border-color: var(--cinza-fumaca);
+  box-shadow: inset 0 0 16px rgba(106, 112, 112, 0.15);
+  animation: pulso-cinza 1.4s ease-in-out infinite;
+}
+
+.cercado.tipo-trex.ativo {
+  border-color: var(--laranja-brasa);
+  box-shadow: inset 0 0 20px rgba(212, 80, 10, 0.2);
+  animation: pulso-perigo 0.5s ease-in-out infinite;
+}
+
+.cercado.acertado {
+  background: rgba(200, 134, 10, 0.18);
+  border-color: var(--ambar);
+  transform: scale(0.93);
+}
+
+.cercado.fugiu {
+  background: rgba(139, 26, 8, 0.18);
+  border-color: var(--vermelho-escuro);
+}
+
+/* Pontos flutuantes */
+.pts-flutuante {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-family: var(--fonte-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--ambar-claro);
+  pointer-events: none;
+  animation: subir-fadeout 0.8s ease forwards;
+  z-index: 10;
+}
+
+.pts-flutuante.negativo { color: var(--laranja-brasa); }
+
+/* Notificação de combo */
+.notif-combo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--fonte-display);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--ambar-claro);
+  text-shadow: 0 0 30px rgba(232, 168, 48, 0.6), 0 4px 20px rgba(0,0,0,0.9);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 100;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+.notif-combo.visivel { animation: combo-aparecer 0.8s ease forwards; }
+
+/* Barra de tempo */
+.barra-tempo-container { width: 100%; height: 4px; background: var(--cor-borda); }
+
+.barra-tempo {
+  height: 100%;
+  width: 100%;
+  background: var(--ambar);
+  transition: width 1s linear, background 0.5s;
+  box-shadow: 0 0 8px rgba(200, 134, 10, 0.5);
+}
+
+.barra-tempo.urgente {
+  background: var(--laranja-brasa);
+  box-shadow: 0 0 12px rgba(212, 80, 10, 0.7);
+  animation: piscar 0.5s infinite;
+}
+
+/* =============================================================
+   TELA DE FIM
+   ============================================================= */
+.fim-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 40px 24px;
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+}
+
+.fim-status { font-family: var(--fonte-display); font-size: 0.72rem; letter-spacing: 0.35em; color: var(--texto-secundario); }
+.fim-status.sucesso { color: var(--ambar-claro); }
+.fim-status.falha   { color: var(--laranja-brasa); }
+
+.fim-nome {
+  font-family: var(--fonte-display);
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  font-weight: 900;
+  color: var(--creme-osseo);
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+}
+
+.fim-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.fim-stat {
+  background: rgba(12, 8, 5, 0.7);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  backdrop-filter: blur(4px);
+}
+
+.fim-stat-label { font-family: var(--fonte-display); font-size: 0.55rem; letter-spacing: 0.2em; color: var(--texto-secundario); }
+.fim-stat-valor { font-family: var(--fonte-display); font-size: 1.4rem; font-weight: 700; color: var(--ambar-claro); }
+
+.fim-posicao {
+  font-family: var(--fonte-display);
+  font-size: 0.76rem;
+  color: var(--ambar);
+  letter-spacing: 0.12em;
+  min-height: 22px;
+}
+
+.fim-botoes { display: flex; gap: 12px; width: 100%; }
+.fim-botoes .btn-primario { flex: 1; }
+
+/* =============================================================
+   TELA DE ATAQUE T-REX — overlay que cobre o jogo durante o evento
+   ============================================================= */
+#overlay-trex {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  /* fundo vermelho escuro com pulso — cria urgência visual imediata */
+  background: rgba(80, 5, 0, 0.88);
+  backdrop-filter: blur(6px);
+  text-align: center;
+  padding: 24px;
+}
+
+#overlay-trex.ativo {
+  display: flex;
+  animation: overlay-trex-entrada 0.3s ease;
+}
+
+.trex-alerta-titulo {
+  font-family: var(--fonte-display);
+  font-size: clamp(0.6rem, 2vw, 0.75rem);
+  letter-spacing: 0.4em;
+  color: #ff6644;
+  margin-bottom: 4px;
+}
+
+.trex-alerta-texto {
+  font-family: var(--fonte-display);
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 900;
+  color: #ff2200;
+  text-shadow: 0 0 40px rgba(255, 34, 0, 0.8), 0 4px 30px rgba(0,0,0,1);
+  letter-spacing: 0.1em;
+  animation: piscar-rapido 0.4s ease-in-out infinite;
+}
+
+.trex-alerta-img {
+  width: clamp(80px, 18vw, 130px);
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(255,34,0,0.7));
+  animation: trex-shake 0.3s ease-in-out infinite;
+}
+
+.trex-alerta-sub {
+  font-family: var(--fonte-mono);
+  font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+  color: #cc9988;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+/* Fases do jogo com fundo escuro mais sólido no HUD */
+.hud-fase.ataque-rex {
+  color: #ff2200;
+  animation: piscar 0.3s infinite;
+}
+
+@keyframes overlay-trex-entrada {
+  from { opacity: 0; transform: scale(1.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes piscar-rapido {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+@keyframes trex-shake {
+  0%, 100% { transform: rotate(-3deg) scale(1.02); }
+  50%       { transform: rotate(3deg)  scale(0.98); }
+}
+
+/* =============================================================
+   ANIMAÇÕES
+   ============================================================= */
+@keyframes pulso-ambar {
+  0%, 100% { box-shadow: inset 0 0 8px rgba(200,134,10,0.1); }
+  50%       { box-shadow: inset 0 0 20px rgba(200,134,10,0.28); }
+}
+
+@keyframes pulso-cinza {
+  0%, 100% { box-shadow: inset 0 0 6px rgba(106,112,112,0.1); }
+  50%       { box-shadow: inset 0 0 16px rgba(106,112,112,0.22); }
+}
+
+@keyframes pulso-perigo {
+  0%, 100% { box-shadow: inset 0 0 14px rgba(212,80,10,0.2), 0 0 8px rgba(212,80,10,0.3); }
+  50%       { box-shadow: inset 0 0 30px rgba(212,80,10,0.45), 0 0 20px rgba(212,80,10,0.5); }
+}
+
+@keyframes piscar {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+@keyframes subir-fadeout {
+  0%   { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-28px); }
+}
+
+@keyframes combo-aparecer {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  30%  { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  70%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+@keyframes pulso-numero {
+  0%   { transform: scale(1.3); opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================================
+   RESPONSIVIDADE
+   ============================================================= */
+@media (max-width: 480px) {
+  .hud { padding: 8px 10px; gap: 5px; }
+  .hud-valor { font-size: 0.8rem; }
+  .hud-label { font-size: 0.42rem; }
+  .grid-cercados { gap: 7px; padding: 10px; }
+  .cercado { font-size: clamp(1.4rem, 7vw, 2rem); border-radius: 5px; }
+  .fim-stats { gap: 8px; }
+}

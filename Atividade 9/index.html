@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DINO STRIKE — Sistema de Contenção</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/png" href="images/logo.png">
+</head>
+<body>
+
+  <!-- ============================================================
+       TELA INICIAL
+  ============================================================ -->
+  <div id="tela-inicial" class="tela ativa">
+    <div class="intro-container">
+
+      <div class="logo-area">
+        <p class="subtitulo-logo">SISTEMA DE CONTENÇÃO</p>
+        <h1 class="titulo-logo">DINO<span class="destaque">STRIKE</span></h1>
+        <p class="versao-logo">v2.4.1 — PROTOCOLO DE EMERGÊNCIA</p>
+      </div>
+
+      <div class="aviso-intro">
+        <p>⚠️ BRECHA DE CONTENÇÃO DETECTADA</p>
+        <p class="texto-intro">
+          Espécimes estão escapando dos cercados. Como operador de contenção,
+          você deve tranquilizar os dinossauros antes que fujam. Cada fuga
+          compromete o protocolo. Três fugas e a contenção falha.
+        </p>
+      </div>
+
+      <div class="campo-nome">
+        <label for="input-nome" class="label-nome">IDENTIFICAÇÃO DO OPERADOR</label>
+        <input type="text" id="input-nome" class="input-nome" placeholder="SEU NOME AQUI" maxlength="20" />
+      </div>
+
+      <div class="legenda-dinos">
+        <p class="legenda-titulo">ESPÉCIMES MONITORADOS</p>
+        <div class="legenda-grid">
+          <div class="legenda-item">
+            <span class="legenda-emoji">🦖</span>
+            <div>
+              <p class="legenda-nome">RAPTOR</p>
+              <p class="legenda-desc">Rápido · +20 pts · 1 fuga</p>
+            </div>
+          </div>
+          <div class="legenda-item">
+            <span class="legenda-emoji">🦕</span>
+            <div>
+              <p class="legenda-nome">BRAQUIO</p>
+              <p class="legenda-desc">Lento · +10 pts · 1 fuga</p>
+            </div>
+          </div>
+          <div class="legenda-item">
+            <span class="legenda-emoji">🐊</span>
+            <div>
+              <p class="legenda-nome">T-REX</p>
+              <p class="legenda-desc">Perigoso · +50 pts · 2 fugas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-jogar" class="btn-primario">▶ INICIAR PROTOCOLO</button>
+
+      <div id="ranking-container" class="ranking-container">
+        <p class="ranking-titulo">🏆 MELHORES OPERADORES</p>
+        <ol id="lista-ranking" class="lista-ranking"></ol>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       TELA DE CONTAGEM REGRESSIVA — nova tela de preparação
+  ============================================================ -->
+  <div id="tela-contagem" class="tela">
+    <p id="contagem-aviso" class="contagem-aviso"></p>
+    <div id="contagem-numero" class="contagem-numero"></div>
+  </div>
+
+
+  <!-- ============================================================
+       TELA DO JOGO
+  ============================================================ -->
+  <div id="tela-jogo" class="tela">
+
+    <header class="hud">
+      <div class="hud-bloco">
+        <span class="hud-label">OPERADOR</span>
+        <span id="hud-nome" class="hud-valor">---</span>
+      </div>
+
+      <div class="hud-bloco hud-centro">
+        <span class="hud-label">NÍVEL DE ALERTA</span>
+        <span id="hud-fase" class="hud-valor hud-fase">CONTROLADO</span>
+      </div>
+
+      <div class="hud-bloco">
+        <span class="hud-label">PONTUAÇÃO</span>
+        <span id="hud-pontos" class="hud-valor hud-pontos">0</span>
+      </div>
+
+      <div class="hud-bloco">
+        <span class="hud-label">COMBO</span>
+        <span id="hud-combo" class="hud-valor hud-combo">x1</span>
+      </div>
+
+      <div class="hud-bloco">
+        <span class="hud-label">TEMPO</span>
+        <span id="hud-tempo" class="hud-valor hud-tempo">60</span>
+      </div>
+
+      <div class="hud-bloco hud-vidas">
+        <span class="hud-label">CONTENÇÕES</span>
+        <div id="hud-icones-vida" class="icones-vida"></div>
+      </div>
+
+      <!-- Botão de cancelar — volta ao menu sem salvar -->
+      <button id="btn-cancelar" class="btn-cancelar">✕ ABANDONAR</button>
+    </header>
+
+    <div id="notif-combo" class="notif-combo"></div>
+
+    <main id="grid-cercados" class="grid-cercados"></main>
+
+    <div class="barra-tempo-container">
+      <div id="barra-tempo" class="barra-tempo"></div>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================================
+       TELA DE FIM DE JOGO
+  ============================================================ -->
+  <div id="tela-fim" class="tela">
+    <div class="fim-container">
+
+      <p id="fim-status" class="fim-status">CONTENÇÃO FALHOU</p>
+      <h2 id="fim-nome" class="fim-nome">OPERADOR</h2>
+
+      <div class="fim-stats">
+        <div class="fim-stat">
+          <span class="fim-stat-label">PONTUAÇÃO FINAL</span>
+          <span id="fim-pontos" class="fim-stat-valor">0</span>
+        </div>
+        <div class="fim-stat">
+          <span class="fim-stat-label">ACERTOS</span>
+          <span id="fim-acertos" class="fim-stat-valor">0</span>
+        </div>
+        <div class="fim-stat">
+          <span class="fim-stat-label">FUGAS</span>
+          <span id="fim-fugas" class="fim-stat-valor">0</span>
+        </div>
+        <div class="fim-stat">
+          <span class="fim-stat-label">MELHOR COMBO</span>
+          <span id="fim-combo" class="fim-stat-valor">x1</span>
+        </div>
+      </div>
+
+      <div id="fim-posicao-ranking" class="fim-posicao"></div>
+
+      <div class="fim-botoes">
+        <button id="btn-jogar-novamente" class="btn-primario">↺ JOGAR NOVAMENTE</button>
+        <button id="btn-menu" class="btn-secundario">⬅ MENU</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       OVERLAY ATAQUE T-REX — aparece sobre a tela de jogo
+  ============================================================ -->
+  <div id="overlay-trex">
+    <p class="trex-alerta-titulo">⚠ ALERTA MÁXIMO ⚠</p>
+    <img src="images/rex.png" alt="T-Rex" class="trex-alerta-img" />
+    <p class="trex-alerta-texto">ATAQUE DE T-REX!</p>
+    <p class="trex-alerta-sub">Prepare-se para o ataque em massa</p>
+  </div>
+
+  <div class="scanlines" aria-hidden="true"></div>
+  <script src="js/script.js"></script>
+</body>
+</html>
