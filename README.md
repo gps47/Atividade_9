@@ -80,10 +80,6 @@ Aprendi a organizar o jogo em estados e funções separadas, a usar `localStorag
 - Fontes: Orbitron e Share Tech Mono (Google Fonts).
 - Estrutura, estilos e mecânica do Ataque de T-Rex desenvolvidos com apoio de IA, conforme declarado acima.
 
-## Licença
-
-Projeto sem licença de uso livre. Todos os direitos reservados ao autor.
-
 ## Bônus
 
 1. Mecânica original: Ataque de T-Rex (ver "Meu Diferencial").
