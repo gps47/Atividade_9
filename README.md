@@ -36,7 +36,7 @@ No código: `verificarAtaqueRex()` é chamada a cada segundo e calcula quanto fa
 
 ## Como Jogar
 
-1. Digite seu nome e aperte "▶ Iniciar Protocolo".
+**1.** Digite seu nome e aperte "▶ Iniciar Protocolo".
 2. Aguarde a contagem regressiva.
 3. Clique nos dinos antes que fujam.
 4. Sobreviva até o tempo acabar ou até perder as 3 vidas.
